@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech Sales, Decoded</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --bg:#0B1220;
+  --panel:#121B30;
+  --panel-2:#0F1830;
+  --border:#22304C;
+  --teal:#4FD1C5;
+  --teal-dim:#1F5A54;
+  --amber:#F5A623;
+  --coral:#FF6B6B;
+  --text-hi:#EDF2F7;
+  --text-mid:#B8C2D9;
+  --text-muted:#7A87A6;
+  --mono:'IBM Plex Mono', monospace;
+  --display:'Space Grotesk', sans-serif;
+  --body:'Inter', sans-serif;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-hi);
+  font-family:var(--body);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+}
+
+.wrap{max-width:920px; margin:0 auto; padding:56px 24px 80px;}
+
+.eyebrow{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--teal);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.eyebrow::before{
+  content:"";
+  width:7px; height:7px; border-radius:50%;
+  background:var(--teal);
+  box-shadow:0 0 0 4px var(--teal-dim);
+}
+
+h1{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(34px,5vw,50px);
+  line-height:1.05;
+  margin:14px 0 12px;
+  letter-spacing:-0.01em;
+}
+h1 span{color:var(--teal);}
+
+.sub{
+  font-size:16px;
+  color:var(--text-mid);
+  max-width:560px;
+  margin:0 0 6px;
+}
+
+.factline{
+  margin-top:28px;
+  padding:12px 16px;
+  border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  background:var(--panel-2);
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--text-mid);
+  border-radius:0 8px 8px 0;
+  min-height:20px;
+}
+.factline b{color:var(--amber); font-weight:600;}
+
+section{margin-top:64px;}
+
+.sec-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap;}
+.sec-head h2{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:22px;
+  margin:0;
+}
+.sec-head p{margin:0; font-size:13px; color:var(--text-muted); font-family:var(--mono);}
+
+/* funnel */
+.funnel{display:flex; flex-direction:column; gap:6px;}
+.stage{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  cursor:pointer;
+  background:none;
+  border:none;
+  padding:0;
+  width:100%;
+  font-family:inherit;
+  color:inherit;
+  text-align:left;
+}
+.stage:focus-visible .bar{outline:2px solid var(--teal); outline-offset:2px;}
+.stage-num{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text-muted);
+  width:16px;
+  flex-shrink:0;
+}
+.bar{
+  height:52px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--panel);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  transition:background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  flex-shrink:0;
+}
+.stage:hover .bar{border-color:var(--teal); transform:translateX(2px);}
+.stage.active .bar{background:var(--teal-dim); border-color:var(--teal);}
+.bar-label{font-weight:600; font-size:14.5px;}
+.bar-count{font-family:var(--mono); font-size:13px; color:var(--text-mid);}
+.stage.active .bar-count{color:var(--teal);}
+
+.detail{
+  margin-top:18px;
+  padding:20px 22px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--panel-2);
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:8px 20px;
+}
+.detail-row-label{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); padding-top:2px;}
+.detail-row-value{font-size:14.5px; color:var(--text-hi);}
+.detail-row-value.tip{color:var(--text-mid);}
+
+/* console */
+.console{
+  display:grid;
+  grid-template-columns:1fr 220px;
+  gap:32px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--panel);
+  padding:26px 28px;
+}
+.slider-row{margin-bottom:20px;}
+.slider-row:last-child{margin-bottom:0;}
+.slider-top{display:flex; justify-content:space-between; margin-bottom:8px;}
+.slider-top .name{font-size:13.5px; font-weight:600;}
+.slider-top .val{font-family:var(--mono); font-size:13px; color:var(--teal);}
+input[type=range]{
+  -webkit-appearance:none;
+  width:100%;
+  height:4px;
+  border-radius:2px;
+  background:var(--border);
+  outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:16px; height:16px; border-radius:50%;
+  background:var(--teal);
+  cursor:pointer;
+  border:2px solid var(--bg);
+}
+input[type=range]::-moz-range-thumb{
+  width:16px; height:16px; border-radius:50%;
+  background:var(--teal);
+  cursor:pointer;
+  border:2px solid var(--bg);
+}
+input[type=range]:focus-visible::-webkit-slider-thumb{outline:2px solid var(--amber); outline-offset:2px;}
+.slider-caption{font-size:12px; color:var(--text-muted); margin-top:5px;}
+
+.gauge-box{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
+.gauge-pct{font-family:var(--display); font-weight:700; font-size:38px; margin-top:6px;}
+.gauge-label{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:4px 10px;
+  border-radius:20px;
+  margin-top:6px;
+  border:1px solid var(--border);
+}
+
+/* glossary */
+.chips{display:flex; flex-wrap:wrap; gap:10px;}
+.chip{
+  position:relative;
+  padding:8px 14px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  background:var(--panel);
+  transition:border-color 0.15s ease, background 0.15s ease;
+}
+.chip:hover, .chip.open{border-color:var(--teal); background:var(--teal-dim);}
+.chip-tooltip{
+  display:none;
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:0;
+  width:220px;
+  padding:10px 12px;
+  background:var(--panel-2);
+  border:1px solid var(--teal);
+  border-radius:8px;
+  font-size:12.5px;
+  font-weight:400;
+  line-height:1.5;
+  color:var(--text-mid);
+  z-index:5;
+}
+.chip:hover .chip-tooltip, .chip.open .chip-tooltip{display:block;}
+
+footer{
+  margin-top:70px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  font-size:12.5px;
+  color:var(--text-muted);
+  font-family:var(--mono);
+}
+
+@media (max-width:640px){
+  .console{grid-template-columns:1fr;}
+  .gauge-box{padding-top:8px; border-top:1px solid var(--border); margin-top:6px;}
+  .bar-label{font-size:13px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Field guide</div>
+  <h1>Tech sales,<br><span>decoded.</span></h1>
+  <p class="sub">How software actually gets sold — the pipeline, the roles, the language. Click around.</p>
+  <div class="factline" id="factline"></div>
+
+  <section>
+    <div class="sec-head">
+      <h2>The pipeline</h2>
+      <p>click a stage</p>
+    </div>
+    <div class="funnel" id="funnel"></div>
+    <div class="detail" id="detail"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Deal health console</h2>
+      <p>adjust the sliders</p>
+    </div>
+    <div class="console">
+      <div class="sliders" id="sliders"></div>
+      <div class="gauge-box">
+        <svg width="140" height="80" viewBox="0 0 140 80">
+          <path d="M 10 75 A 60 60 0 0 1 130 75" fill="none" stroke="#22304C" stroke-width="10" stroke-linecap="round"/>
+          <path id="gaugeArc" d="M 10 75 A 60 60 0 0 1 130 75" fill="none" stroke="#4FD1C5" stroke-width="10" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="94.25"/>
+        </svg>
+        <div class="gauge-pct" id="gaugePct">50%</div>
+        <div class="gauge-label" id="gaugeLabel">Developing</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Speak the language</h2>
+      <p>hover or tap a term</p>
+    </div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <footer>Tech Sales, Decoded — an interactive field guide</footer>
+</div>
+
+<script>
+const stages = [
+  {label:"Prospecting", count:"500 leads sourced", owner:"SDR", metric:"~8% reply rate on cold outreach", tip:"Research before you dial — personalized beats generic every time."},
+  {label:"Qualifying", count:"150 discovery calls", owner:"SDR \u2192 AE", metric:"70% need 3+ touches to book", tip:"Dig for real pain, budget, and urgency — not just polite interest."},
+  {label:"Demo", count:"60 demos delivered", owner:"AE", metric:"Multi-threaded deals win ~2x more", tip:"Show the outcome the buyer cares about, not a feature tour."},
+  {label:"Negotiation", count:"25 in procurement", owner:"AE + Legal", metric:"Avg. cycle: 45\u201390 days", tip:"Price objections are rarely about price — find what's underneath."},
+  {label:"Closed won", count:"10 contracts signed", owner:"AE \u2192 CSM", metric:"2% overall lead-to-close rate", tip:"The deal isn't done until onboarding is scheduled and a champion is briefed."}
+];
+const widths = [100,78,58,40,26];
+
+const funnelEl = document.getElementById('funnel');
+const detailEl = document.getElementById('detail');
+
+function renderDetail(i){
+  const s = stages[i];
+  detailEl.innerHTML = `
+    <div class="detail-row-label">Stage</div><div class="detail-row-value">${s.label} \u2014 ${s.count}</div>
+    <div class="detail-row-label">Owner</div><div class="detail-row-value">${s.owner}</div>
+    <div class="detail-row-label">Signal</div><div class="detail-row-value">${s.metric}</div>
+    <div class="detail-row-label">Tip</div><div class="detail-row-value tip">${s.tip}</div>
+  `;
+}
+
+stages.forEach((s,i)=>{
+  const btn = document.createElement('button');
+  btn.className = 'stage' + (i===0 ? ' active' : '');
+  btn.innerHTML = `
+    <span class="stage-num">0${i+1}</span>
+    <div class="bar" style="width:${widths[i]}%">
+      <span class="bar-label">${s.label}</span>
+      <span class="bar-count">${s.count}</span>
+    </div>
+  `;
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.stage').forEach(el=>el.classList.remove('active'));
+    btn.classList.add('active');
+    renderDetail(i);
+  });
+  funnelEl.appendChild(btn);
+});
+renderDetail(0);
+
+const facts = [
+  "Median B2B SaaS sales cycle: <b>~60 days</b>",
+  "Deals with a confirmed budget close <b>2\u20133x</b> more often",
+  "Land-and-expand: existing accounts often out-earn new logos",
+  "SDR books the meeting. AE runs the deal. CSM keeps it alive.",
+  "A champion without budget authority still can't sign"
+];
+let fi = 0;
+const factEl = document.getElementById('factline');
+function showFact(){ factEl.innerHTML = facts[fi]; fi = (fi+1) % facts.length; }
+showFact();
+setInterval(showFact, 4200);
+
+const dims = [
+  {key:'budget', name:'Budget confirmed', caption:'Is there money allocated for this?'},
+  {key:'authority', name:'Authority engaged', caption:'Is the actual decision-maker in the room?'},
+  {key:'need', name:'Need / pain', caption:'How sharp is the problem you solve?'},
+  {key:'timeline', name:'Timeline urgency', caption:'Is there a real reason to act now?'}
+];
+const values = {budget:50, authority:50, need:50, timeline:50};
+
+const slidersEl = document.getElementById('sliders');
+dims.forEach(d=>{
+  const row = document.createElement('div');
+  row.className = 'slider-row';
+  row.innerHTML = `
+    <div class="slider-top"><span class="name">${d.name}</span><span class="val" id="val-${d.key}">50</span></div>
+    <input type="range" min="0" max="100" step="1" value="50" id="slide-${d.key}">
+    <div class="slider-caption">${d.caption}</div>
+  `;
+  slidersEl.appendChild(row);
+});
+
+const gaugeArc = document.getElementById('gaugeArc');
+const gaugePct = document.getElementById('gaugePct');
+const gaugeLabel = document.getElementById('gaugeLabel');
+const ARC_LEN = 188.5;
+
+function bandFor(pct){
+  if (pct <= 25) return {text:'Long shot', color:'#FF6B6B'};
+  if (pct <= 50) return {text:'Developing', color:'#F5A623'};
+  if (pct <= 75) return {text:'Strong', color:'#4FD1C5'};
+  return {text:'Ready to close', color:'#4FD1C5'};
+}
+
+function updateGauge(){
+  const pct = Math.round((values.budget + values.authority + values.need + values.timeline) / 4);
+  gaugePct.textContent = pct + '%';
+  const offset = ARC_LEN - (ARC_LEN * pct / 100);
+  gaugeArc.setAttribute('stroke-dashoffset', offset);
+  const band = bandFor(pct);
+  gaugeLabel.textContent = band.text;
+  gaugeArc.setAttribute('stroke', band.color);
+  gaugePct.style.color = band.color;
+  gaugeLabel.style.color = band.color;
+  gaugeLabel.style.borderColor = band.color;
+}
+
+dims.forEach(d=>{
+  const input = document.getElementById('slide-'+d.key);
+  const val = document.getElementById('val-'+d.key);
+  input.addEventListener('input', ()=>{
+    values[d.key] = parseInt(input.value, 10);
+    val.textContent = values[d.key];
+    updateGauge();
+  });
+});
+updateGauge();
+
+const glossary = [
+  {term:'ARR', def:'Annual recurring revenue — subscription revenue normalized to a yearly figure.'},
+  {term:'ACV', def:'Annual contract value — what one customer\u2019s deal is worth per year.'},
+  {term:'MRR', def:'Monthly recurring revenue — the monthly version of ARR.'},
+  {term:'Churn', def:'The rate at which customers cancel or don\u2019t renew.'},
+  {term:'Land & expand', def:'Start with a small deal, then grow the account over time.'},
+  {term:'MEDDIC', def:'A qualification framework: Metrics, Economic buyer, Decision criteria, Decision process, Identify pain, Champion.'},
+  {term:'Champion', def:'An internal advocate who sells on your behalf when you\u2019re not in the room.'},
+  {term:'Multi-threading', def:'Building relationships with several stakeholders, not just one contact.'},
+  {term:'BANT', def:'An older qualification framework: Budget, Authority, Need, Timeline.'},
+  {term:'Economic buyer', def:'The person who actually controls the budget and can approve the spend.'},
+  {term:'NRR', def:'Net revenue retention — revenue kept and grown from existing customers, including upsells and minus churn.'},
+  {term:'CAC', def:'Customer acquisition cost — what it costs, in sales and marketing, to win one new customer.'},
+  {term:'LTV', def:'Lifetime value — the total revenue a customer is expected to generate over the relationship.'},
+  {term:'Pipeline coverage', def:'Total open pipeline value compared to the quota it needs to cover, often targeted at 3\u20134x.'},
+  {term:'Quota', def:'The revenue target an individual rep is expected to hit in a given period.'},
+  {term:'POC', def:'Proof of concept — a limited, hands-on trial that lets the buyer test the product before committing.'},
+  {term:'Discovery call', def:'An early conversation focused on understanding the buyer\u2019s problem before pitching a solution.'},
+  {term:'Objection handling', def:'Responding to a buyer\u2019s stated hesitation in a way that moves the deal forward.'},
+  {term:'Upsell', def:'Selling an existing customer more of what they already have, like a higher tier or more seats.'},
+  {term:'Cross-sell', def:'Selling an existing customer a different product alongside what they already use.'},
+  {term:'Sales cycle', def:'The total time from first contact to closed deal.'},
+  {term:'Book of business', def:'The full set of accounts a rep or CSM manages.'},
+  {term:'Whale', def:'An unusually large deal or account relative to the typical size.'}
+];
+const chipsEl = document.getElementById('chips');
+glossary.forEach(g=>{
+  const c = document.createElement('div');
+  c.className = 'chip';
+  c.tabIndex = 0;
+  c.innerHTML = `${g.term}<div class="chip-tooltip">${g.def}</div>`;
+  c.addEventListener('click', ()=>{
+    const wasOpen = c.classList.contains('open');
+    document.querySelectorAll('.chip').forEach(el=>el.classList.remove('open'));
+    if(!wasOpen) c.classList.add('open');
+  });
+  chipsEl.appendChild(c);
+});
+</script>
+</body>
+</html>
